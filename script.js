@@ -73,7 +73,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.service-card, .tech-category, .why-item, .value-item');
+    const animatedElements = document.querySelectorAll('.testimonial-card, .step-card, .developer-card, .faq-item, .testimonial-item');
     
     animatedElements.forEach(el => {
         el.style.opacity = '0';
@@ -106,56 +106,6 @@ if (contactForm) {
     });
 }
 
-// Counter Animation for Stats
-const animateCounter = (element, target, duration = 2000) => {
-    let start = 0;
-    const increment = target / (duration / 16);
-    const isPercentage = target === 98;
-    
-    const timer = setInterval(() => {
-        start += increment;
-        if (start >= target) {
-            element.textContent = isPercentage ? `${target}%` : `${target}+`;
-            clearInterval(timer);
-        } else {
-            element.textContent = isPercentage 
-                ? `${Math.floor(start)}%` 
-                : `${Math.floor(start)}+`;
-        }
-    }, 16);
-};
-
-// Animate stats when they come into view
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            entry.target.classList.add('animated');
-            const statNumber = entry.target.querySelector('.stat-number');
-            if (statNumber) {
-                const text = statNumber.textContent;
-                const number = parseInt(text);
-                statNumber.textContent = '0';
-                animateCounter(statNumber, number);
-            }
-        }
-    });
-}, { threshold: 0.5 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    const statItems = document.querySelectorAll('.stat-item');
-    statItems.forEach(item => statsObserver.observe(item));
-});
-
-// Parallax Effect for Hero Section (Optional Enhancement)
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const heroBackground = document.querySelector('.hero-background');
-    
-    if (heroBackground && scrolled < window.innerHeight) {
-        heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
-    }
-});
-
 // Active Nav Link Highlighting
 const sections = document.querySelectorAll('section[id]');
 
@@ -180,3 +130,12 @@ function highlightNavLink() {
 
 window.addEventListener('scroll', highlightNavLink);
 
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (navMenu && hamburger) {
+        if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    }
+});
